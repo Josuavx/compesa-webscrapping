@@ -1,0 +1,12 @@
+intervensao-a                 ---- intervenção de parte de um dia ---- tem água parcial 
+intervensao                   ---- intervenção o dia todo
+#jqx-calendar-cell-month       ---- não é dia de água
+jqx-calendar-cell-specialDate ---- tem água o dia todo
+
+
+jqx-rc-all jqx-item jqx-calendar-cell jqx-calendar-cell-month intervensao-a
+jqx-rc-all jqx-item jqx-calendar-cell jqx-calendar-cell-month jqx-calendar-cell-specialDate
+jqx-rc-all jqx-item jqx-calendar-cell jqx-calendar-cell-month
+
+
+7, 11, 15, 19, 23, 27, 31

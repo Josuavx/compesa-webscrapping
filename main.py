@@ -21,7 +21,6 @@ wait = WebDriverWait(browser, 30)
 
 input = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="advanced_iframe"]')))
 
-
 browser.switch_to.frame(input)
 
 search = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="search_input"]')))
@@ -29,27 +28,46 @@ focus = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="map_gc"]'
 
 browser.execute_script("arguments[0].scrollIntoView();", focus)
 
-print("Find: ")
-print(input)
-print(search)
-search.send_keys("Pina", Keys.RETURN)
+search.send_keys("Jordão", Keys.RETURN)
 time.sleep(5)
-search.clear()
-search.send_keys("Ibura", Keys.RETURN)
-
+#search.clear()
 
 card = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="cellTableViewdemoChart2"]/tbody')))
-print("card")
-print(card)
+
 
 disponibility = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'jqx-tooltip-text')))
 
-print(disponibility[0].get_attribute('textContent'))
+print("Numero: ")
+print(len(disponibility))
 
 for e in disponibility:
     print(str(i) + ":")
     i+= 1
     print(e.get_attribute('textContent'))
+
+#ACHOU!!!
+elementsA = browser.find_elements(By.CLASS_NAME, 'intervensao-a')
+elementsI = browser.find_elements(By.CLASS_NAME, 'intervensao')
+#elementsV = browser.find_elements(By.CLASS_NAME, 'jqx-calendar-cell-month')
+elementsD = browser.find_elements(By.CLASS_NAME, 'jqx-calendar-cell-specialDate')
+
+elementsAll = elementsA + elementsI + elementsD # + elementsV
+
+def get_text_content(element):
+    text = element.get_attribute('textContent')
+    try:
+        return float(text)
+    except ValueError:
+        return float('inf')  # Definindo um valor infinito para tratar casos inválidos
+
+elementsAllSorted = sorted(elementsAll, key=get_text_content)
+
+for i in elementsAllSorted:
+    print(i.get_attribute('textContent'))
+#    print(i.value_of_css_property('background'))
+
+elemento = elementsAllSorted[8].get_attribute("innerHTML")
+print(elemento)
 
 print("End")
 time.sleep(20)
