@@ -5,8 +5,13 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
+import logging
 
 i = 0
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+logging.info('Info! ')
 
 options = webdriver.ChromeOptions()
 options.add_argument("--start-maximized")
@@ -28,28 +33,13 @@ focus = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="map_gc"]'
 
 browser.execute_script("arguments[0].scrollIntoView();", focus)
 
-search.send_keys("51240-500", Keys.RETURN)
-time.sleep(5)
+search.send_keys("51240-490", Keys.RETURN) # 51220-230
+
 #search.clear()
 
 card = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="cellTableViewdemoChart2"]/tbody')))
 
 disponibility = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'jqx-tooltip-text')))
-
-print("Numero: ")
-print(len(disponibility))
-
-'''
-for i, e in enumerate(disponibility):
-    print(str(i) + ":")
-    i += 1
-    tooltip_text = e.get_attribute('textContent')
-    lines = tooltip_text.split('\n')
-    for line in lines:
-        line = line.strip()
-        if line:
-            print(line)
-'''
 
 #ACHOU!!!
 elementsA = browser.find_elements(By.CLASS_NAME, 'intervensao-a')
@@ -68,17 +58,18 @@ def get_text_content(element):
 
 elementsAllSorted = sorted(elementsAll, key=get_text_content)
 
-for i in elementsAllSorted:
-    #print(i.get_attribute('textContent'))
-    print(i.value_of_css_property('background'))
-    print("Dia " + str(i.get_attribute('textContent')) + ":")
-    #i += 1
-    tooltip_text = i.get_attribute('textContent')
-    lines = tooltip_text.split('\n')
-    for line in lines:
-        line = line.strip()
-        if line:
-            print(line)
+for day, situation in zip(elementsAllSorted, disponibility):
+    
+    mensagem = " É dia de água "
+
+    if ('linear-gradient' in day.value_of_css_property('background')):
+        mensagem = " Chegará água parcialmente "    
+
+    elif 'rgba(218, 41, 47, 0.5)' in day.value_of_css_property('background'):
+        mensagem = " Não chegará água "
+    
+    print('Dia '+ str(day.get_attribute('textContent')) + mensagem + situation.get_attribute('textContent').lower())
+    
 
 
 print("End")
