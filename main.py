@@ -28,22 +28,28 @@ focus = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="map_gc"]'
 
 browser.execute_script("arguments[0].scrollIntoView();", focus)
 
-search.send_keys("Jordão", Keys.RETURN)
+search.send_keys("51240-500", Keys.RETURN)
 time.sleep(5)
 #search.clear()
 
 card = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@id="cellTableViewdemoChart2"]/tbody')))
-
 
 disponibility = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'jqx-tooltip-text')))
 
 print("Numero: ")
 print(len(disponibility))
 
-for e in disponibility:
+'''
+for i, e in enumerate(disponibility):
     print(str(i) + ":")
-    i+= 1
-    print(e.get_attribute('textContent'))
+    i += 1
+    tooltip_text = e.get_attribute('textContent')
+    lines = tooltip_text.split('\n')
+    for line in lines:
+        line = line.strip()
+        if line:
+            print(line)
+'''
 
 #ACHOU!!!
 elementsA = browser.find_elements(By.CLASS_NAME, 'intervensao-a')
@@ -63,11 +69,17 @@ def get_text_content(element):
 elementsAllSorted = sorted(elementsAll, key=get_text_content)
 
 for i in elementsAllSorted:
-    print(i.get_attribute('textContent'))
-#    print(i.value_of_css_property('background'))
+    #print(i.get_attribute('textContent'))
+    print(i.value_of_css_property('background'))
+    print("Dia " + str(i.get_attribute('textContent')) + ":")
+    #i += 1
+    tooltip_text = i.get_attribute('textContent')
+    lines = tooltip_text.split('\n')
+    for line in lines:
+        line = line.strip()
+        if line:
+            print(line)
 
-elemento = elementsAllSorted[8].get_attribute("innerHTML")
-print(elemento)
 
 print("End")
 time.sleep(20)
